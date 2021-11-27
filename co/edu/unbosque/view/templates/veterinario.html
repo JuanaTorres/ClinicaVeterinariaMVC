@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Four Pets Citizens</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"
+          integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+            integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+            crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"
+            integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut"
+            crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"
+            integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k"
+            crossorigin="anonymous"></script>
+    <script
+            src="http://code.jquery.com/jquery-3.3.1.min.js"
+            integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+            crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css">
+    <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+    <script src="Javascript/vet.js" type="module"></script>
+    <link rel="stylesheet" href="CSS/vet.css" type="text/css">
+</head>
+<!--Navigation of the vet interface-->
+<nav>
+    <ul class="nav nav-tabs" id="myTab" role="tablist">
+        <li class="nav-item">
+            <a id="LoginButton" href='index.html'>
+                <img src="imgs/home.png" width="40px" height="40px">
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link active" id="registerVisit-tab" data-toggle="tab" href="#registerVisit" role="tab"
+               aria-controls="registerVisit" aria-selected="true">Crear Visita</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="VisitTablePet-tab" data-toggle="tab" href="#VisitTablePet" role="tab"
+               aria-controls="VisitTablePet"
+               aria-selected="false">Tabla de Visitas</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="UpVet-tab" data-toggle="tab" href="#UpVet" role="tab" aria-controls="UpVet"
+               aria-selected="false">Cambiar datos de Veterinaria</a>
+        </li>
+    </ul>
+</nav>
+
+<body class="vetBack">
+
+<div class="tab-content" id="myTabContent">
+    <div class="tab-pane fade show active" id="registerVisit" role="tabpanel" aria-labelledby="registerVisit-tab"
+         align="center">
+        <div class="configureStyleMainForms">
+
+            <!--Form to create a new visit in the vet-->
+            <form action="CreatVisitsform" autocomplete="off" id="formVC" name="formVC">
+                <fieldset>
+                    <legend> Formulario de Registro de Visitas</legend>
+                    <label for="CreatAt">Fecha de la visita: </label><br>
+                    <input type="date" name="CreatAt" id="CreatAt" required>
+                    <br>
+                    <br>
+                    <label for="type">Motivo de la visita: </label><br>
+                    <select name="type" id="type" required>
+                        <option value="" selected="selected">Seleccione</option>
+                        <option value="2">Esterilización</option>
+                        <option value="3">Implantación de microchip</option>
+                        <option value="4">Vacunación</option>
+                        <option value="5">Desparasitación</option>
+                        <option value="6">Urgencia</option>
+                        <option value="7">Control</option>
+                    </select>
+                    <br>
+                    <br>
+                    <label for="microchip">Microchip de Mascota</label><br>
+                    <input type="text" name="microchip" size="30" id="microchip" placeholder="Ej: 123456789" disabled>
+
+                    <br>
+                    <br>
+                    <label for="description">Descripción de la visita</label><br>
+                    <input type="text" name="description" size="30" id="description"
+                           placeholder="Ej: Cita de control de esterilización">
+                    <br>
+                    <br>
+                    <label for="petId">Identificación de Mascota</label><br>
+                    <input type="text" name="petId" size="30" id="petId" placeholder="Ej: 123456789">
+                    <br>
+                    <br>
+                    <p align="center">
+                        <button type="button" id="Cpets">Crear Visita</button>
+                    </p>
+                </fieldset>
+            </form>
+        </div>
+    </div>
+    <div class="tab-pane fade" id="VisitTablePet" role="tabpanel" aria-labelledby="VisitTablePet-tab" align="center">
+        <div class="configureStyleMainBox">
+            <h3 class="titles">Busqueda de visitas por fechas y nombre de la mascota</h3>
+            <h5>Filtrar</h5>
+
+            <!-- Filters of Date and pet name to search the visits of this pet-->
+            <form name="formTCV" id="formTCV">
+                <label for="Date1"> Primer rango de fecha</label><br>
+                <input type="Date" name="Date1" size="30" id="Date1" required>
+                <br>
+                <br>
+                <label for="Date2"> Segundo rango de fecha</label><br>
+                <input type="Date" name="Date2" size="30" id="Date2" required>
+                <br>
+                <br>
+                <label for="PetName">Nombre de la mascota</label><br>
+                <input type="text" name="PetName" size="30" id="PetName" required>
+                <br>
+                <br>
+                <button class="btn btn-rounded btn-primary" id="filter" type="button">Filtrar</button>
+            </form>
+
+            <div class="TableVisit" id="TableVisit">
+                <h2 class="titles">Tabla de Visitas de Mascotas</h2>
+
+                <!--Table that shows the visits of a pet in the vet-->
+                <table id="myTablePets" class="table table-fluid">
+                    <thead>
+                    <tr>
+                        <th scope="col">Identificación de la Visita</th>
+                        <th scope="col">Fecha de la visita</th>
+                        <th scope="col">Tipo de la visita</th>
+                        <th scope="col">Descripción</th>
+                        <th scope="col">Microchip</th>
+                        <th scope="col">Nombre de la Veterinaria</th>
+                        <th scope="col">Identificación de la Mascota</th>
+                        <th scorpe="col">Nombre de la mascota</th>
+                    </tr>
+                    </thead>
+                </table>
+            </div>
+
+        </div>
+    </div>
+    <div class="tab-pane fade" id="UpVet" role="tabpanel" aria-labelledby="UpVet-tab" align="center">
+        <div class="configureStyleMainForms">
+
+            <!--Form to update the vet's user data-->
+            <form name="formUser" autocomplete="off" id="formUser">
+                <fieldset>
+                    <legend> Formulario de Actualizar datos de la Veterinaria</legend>
+                    <br>
+                    <label for="neighborhoodUser">Seleccione la localidad:</label><br>
+                    <select id="neighborhoodUser" name="neighborhoodUser" required>
+                        <option value="" selected="selected">Seleccione</option>
+                        <option value="2">Usaquen</option>
+                        <option value="3">Chapinero</option>
+                        <option value="4">Santa Fe</option>
+                        <option value="5">San Cristobal</option>
+                        <option value="6">Usme</option>
+                        <option value="7">Tunjuelito</option>
+                        <option value="8">Bosa</option>
+                        <option value="9">Kennedy</option>
+                        <option value="10">Fontibon</option>
+                        <option value="11">Engativa</option>
+                        <option value="12">Suba</option>
+                        <option value="13">Barrios Unidos</option>
+                        <option value="14">Teusaquillo</option>
+                        <option value="15">Los Martires</option>
+                        <option value="16">Antonio Nariño</option>
+                        <option value="17">Puente Aranda</option>
+                        <option value="18">La Candelaria</option>
+                        <option value="19">Uribe</option>
+                        <option value="20">Ciudad Bolivar</option>
+                        <option value="21">Sumapaz</option>
+                        <option value="22">Municipios aledaños</option>
+                    </select>
+                    <br>
+                    <br>
+                    <label for="addressUser">Digite la dirección:</label><br>
+                    <input type="text" name="addressUser" size="30" id="addressUser" placeholder="Ej: Cr 7 # 100 - 10"
+                           required>
+                    <br>
+                    <br>
+
+                    <p align="center">
+                        <button type="button" id="Uuser">Actualizar datos</button>
+                    </p>
+                </fieldset>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>

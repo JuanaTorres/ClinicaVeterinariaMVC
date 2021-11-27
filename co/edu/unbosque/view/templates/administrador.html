@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Clinica Veterinaria</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"
+          integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+            integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+            crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"
+            integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut"
+            crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"
+            integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k"
+            crossorigin="anonymous"></script>
+    <script
+            src="http://code.jquery.com/jquery-3.3.1.min.js"
+            integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+            crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css">
+    <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+    <link rel="stylesheet" href="CSS/official.css" type="text/css">
+    <script src="Javascript/official.js" type="module"></script>
+</head>
+<!-- Navigation of the owner interface -->
+<nav>
+    <ul class="nav nav-tabs" id="myTab" role="tablist">
+        <li class="nav-item">
+            <a id="LoginButton" href='index.html'>
+                <img src="imgs/home.png" width="40px" height="40px">
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link active" id="officialOwner-tab" data-toggle="tab" href="#officialOwner" role="tab"
+               aria-controls="officialOwner" aria-selected="true">Tabla de Propietario</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="officialPet-tab" data-toggle="tab" href="#officialPet" role="tab"
+               aria-controls="officialPet" aria-selected="false">Tabla de Mascotas</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="officialCase-tab" data-toggle="tab" href="#officialCase" role="tab"
+               aria-controls="officialCase" aria-selected="false">Tabla de Casos</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="officialVisit-tab" data-toggle="tab" href="#officialVisit" role="tab"
+               aria-controls="officialVisit" aria-selected="false">Tabla de Visitas</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="officialFilteredPet-tab" data-toggle="tab" href="#officialFilteredPet" role="tab"
+               aria-controls="officialFilteredPet" aria-selected="false">Tabla de Mascotas por Filtros</a>
+        </li>
+    </ul>
+</nav>
+<body class="officialBack">
+
+<div class="tab-content" id="myTabContent">
+    <div class="tab-pane fade show active" id="officialOwner" role="tabpanel" aria-labelledby="officialOwner-tab"
+         align="center">
+        <div class="configureStyleMainBox">
+            <h3 class="titles">Tabla de Propietarios</h3>
+            <!--Table that shows the owners in the official-->
+            <table id="myTableOfficialOwners" class="table table-fluid">
+                <thead>
+                <tr>
+                    <th scope="col">Clasificación</th>
+                    <th scope="col">Total de Resultados</th>
+                </tr>
+                </thead>
+            </table>
+
+        </div>
+    </div>
+    <div class="tab-pane fade" id="officialPet" role="tabpanel" aria-labelledby="officialPet-tab" align="center">
+        <div class="configureStyleMainBox">
+            <h3 class="titles">Tabla de Mascotas</h3>
+            <!--Table that shows the pets in the official-->
+            <table id="myTableOfficialPets" class="table table-fluid">
+                <thead>
+                <tr>
+                    <th scope="col">Clasificación</th>
+                    <th scope="col">Total de Resultados</th>
+
+                </tr>
+                </thead>
+            </table>
+        </div>
+
+    </div>
+
+    <div class="tab-pane fade" id="officialCase" role="tabpanel" aria-labelledby="officialPet-tab" align="center">
+        <div class="configureStyleMainBox">
+            <h3 class="titles">Tabla de Casos</h3>
+            <!--Table that shows the pets in the official-->
+            <table id="myTableOfficialCases" class="table table-fluid">
+                <thead>
+                <tr>
+                    <th scope="col">Clasificación</th>
+                    <th scope="col">Total de Resultados</th>
+                </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
+
+    <div class="tab-pane fade" id="officialVisit" role="tabpanel" aria-labelledby="officialPet-tab" align="center">
+        <div class="configureStyleMainBox">
+            <h3 class="titles">Tabla de Visitas</h3>
+            <!--Table that shows the pets in the official-->
+            <table id="myTableOfficialVisits" class="table table-fluid">
+                <thead>
+                <tr>
+                    <th scope="col">Clasificación</th>
+                    <th scope="col">Total de Resultados</th>
+                </tr>
+                </thead>
+            </table>
+        </div>
+
+    </div>
+
+    <div class="tab-pane fade" id="officialFilteredPet" role="tabpanel" aria-labelledby="officialFilteredPet-tab"
+         align="center">
+        <div class="filters">
+            <!--Filters to search pets in the table -->
+            <h5>Filtrar</h5>
+            <!-- Name and date filters for the cases and visits table-->
+            <form name="formFilter" id="formFilter">
+                <label for="IdPet">ID de la mascota</label><br>
+                <input type="text" name="IdPet" size="30" id="IdPet">
+                <br>
+                <br>
+                <label for="MicrochipPet">Microchip de la mascota</label><br>
+                <input type="text" name="MicrochipPet" size="30" id="MicrochipPet">
+                <br>
+                <br>
+                <label for="NamePet">Nombre de la mascota</label><br>
+                <input type="text" name="NamePet" size="30" id="NamePet">
+                <br>
+                <br>
+                <label for="RacePet">Raza de la mascota</label><br>
+                <input type="text" name="RacePet" size="30" id="RacePet">
+                <br>
+                <br>
+                <h6>Especie de la mascota</h6>
+                <label>Canino<input class="especies" type="checkbox" id="e1" value="Canino"></label>
+                <br>
+                <label>Felino<input class="especies" type="checkbox" id="e2" value="Felino"></label>
+                <br>
+                <br>
+                <h6>Sexo de la mascota</h6>
+                <label>Macho<input class="sexes" type="checkbox" id="s1" value="Macho"></label>
+                <br>
+                <label>Hembra<input class="sexes" type="checkbox" id="s2" value="Hembra"></label>
+                <br>
+                <br>
+                <h6>Tamaño de la mascota</h6>
+                <label>Muy Grande<input class="sizesToFilter" type="checkbox" id="t1" value="Muy Grande"></label>
+                <br>
+                <label>Grande<input class="sizesToFilter" type="checkbox" id="t2" value="Grande"></label>
+                <br>
+                <label>Mediano<input class="sizesToFilter" type="checkbox" id="t3" value="Mediano"></label>
+                <br>
+                <label>Pequeño<input class="sizesToFilter" type="checkbox" id="t4" value="Pequeño"></label>
+                <br>
+                <label>Miniatura<input class="sizesToFilter" type="checkbox" id="t5" value="Miniatura"></label>
+                <br>
+                <br>
+                <button class="btn btn-rounded btn-primary" id="filterOwner" type="button">Filtrar</button>
+            </form>
+        </div>
+        <div class="tablefilters">
+            <h3 class="titles">Tabla de Filtros de Mascotas </h3>
+            <!--Table that shows the pets and filtered it in the official-->
+            <table id="myTableOfficialFilters" class="table table-fluid">
+                <thead>
+                <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">microchip</th>
+                    <th scope="col">nombre</th>
+                    <th scope="col">especie</th>
+                    <th scope="col">raza</th>
+                    <th scope="col">tamaños</th>
+                    <th scope="col">sexo</th>
+                    <th scope="col">imagen</th>
+                </tr>
+                </thead>
+            </table>
+        </div>
+
+    </div>
+</div>
+</body>
+</html>

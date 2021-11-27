@@ -1,0 +1,48 @@
+
+.signUpBack {
+    background: url("../imgs/3pets.jpg") no-repeat center fixed;
+    background-size: cover;
+}
+fieldset button {
+    font-family: Verdana;
+    border-radius: 50px;
+}
+submit{
+    font-family: Verdana;
+    background-color: #dcdde1;
+    border-color: #dcdde1;
+    border-radius: 18px;
+}
+
+input {
+    border-radius: 30px;
+}
+select {
+    font-family: Verdana;
+    border-radius: 30px;
+}
+
+.SelectForm {
+    font-family: Verdana;
+    color: white;
+    width: 60%;
+    background: #FFFFFF44;
+    padding: 30px;
+    border-radius: 20px;
+}
+
+.VetSingUp {
+    font-family: Verdana;
+    color: white;
+    width: 60%;
+    background: #FFFFFF44;
+    padding: 30px;
+    border-radius: 20px;
+
+}
+
+
+fieldset {
+    border-color: transparent;
+}
+

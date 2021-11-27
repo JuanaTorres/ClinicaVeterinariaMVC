@@ -1,0 +1,43 @@
+/*
+Styles for the login interface
+ */
+.loginBack {
+    background: url("../imgs/2pets.jpeg") no-repeat center fixed;
+    background-size: cover;
+}
+
+/*
+Styles for the fieldset login
+ */
+fieldset {
+    font-family: Verdana;
+    text-align: center;
+    alignment: center;
+    font-size: 15px;
+
+    width: 250px;
+    height: 230px;
+    background: #353b48;
+    border-radius: 15px;
+    border: solid #353b48;
+    box-shadow: 8px 8px 10px 0 #818181;
+    color: white;
+}
+
+/*
+Styles for the buttons
+ */
+fieldset button {
+    font-family: Verdana;
+    border-radius: 50px;
+}
+submit{
+    font-family: Verdana;
+    border-radius: 50px;
+}
+/*
+Border radius for the input fields
+ */
+input {
+    border-radius: 30px;
+}

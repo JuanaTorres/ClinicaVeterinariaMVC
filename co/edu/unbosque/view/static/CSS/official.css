@@ -1,0 +1,34 @@
+.officialBack {
+    background: url("../imgs/5pets.jpg") no-repeat fixed;
+    background-size: cover;
+}
+
+.tablefilters {
+    float: left;
+    width: 70%;
+    padding: 30px;
+    background: #FFFFFF44;
+}
+
+.filters {
+    float: left;
+    width: 25%;
+    padding: 30px;
+    background: #FFFFFF44;
+}
+
+/*
+Font to the letter
+ */
+select {
+    font-family: Verdana;
+    border-radius: 30px;
+}
+
+/*
+Border radius for the input fields
+ */
+input {
+    border-radius: 30px;
+    width: 100%;
+}

@@ -1,0 +1,56 @@
+/*
+Styles for the owner interface
+ */
+.ownerBack {
+    background: url("../imgs/1pets.png") no-repeat fixed;
+    background-size: cover;
+}
+
+/*
+Styles for the forms
+ */
+fieldset {
+    border-color: transparent;
+}
+
+/*
+Position and background for the forms
+ */
+.configureStyleMainForms {
+    left: 1%;
+    width: 100%;
+    background: #FFFFFF44;
+    padding: 30px;
+    border-radius: 20px;
+}
+
+/*
+Background for the forms
+ */
+.configureStyleMainBox {
+    background: #FFFFFF44;
+    border-radius: 20px;
+}
+
+/*
+Border radius for the input fields
+ */
+input {
+    border-radius: 30px;
+}
+
+/*
+Font to the letter
+ */
+select {
+    font-family: Verdana;
+    border-radius: 30px;
+}
+
+/*
+Styles for the buttons
+ */
+fieldset button {
+    font-family: Verdana;
+    border-radius: 50px;
+}

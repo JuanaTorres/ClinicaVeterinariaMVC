@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Clinica Veterinaria- Inscripcion de cuenta</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='/CSS/signUp.css') }}">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+</head>
+<body class="signUpBack">
+
+{% block content %}
+<div class="container">
+    {% for message in get_flashed_messages() %}
+    <div class="alert alert-warning">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        {{ message }}
+    </div>
+    {% endfor %}
+
+    {% block page_content %}{% endblock %}
+</div>
+{% endblock %}
+<br>
+<br>
+<div class="VetSingUp">
+
+    <form action="/inicio" method="POST">
+        <fieldset align="center">
+            <label for="rol"> Seleccione rol: </label>
+            <select name="rol" id="rol" required>
+                <option value="">Seleccione</option>
+                <option value="Veterinario">Veterinario</option>
+                <option value="Propietario">Propietario</option>
+            </select><br>
+            <label for="user">Nombre de usuario:</label><br>
+            <input type="text" name="user" id="user" required><br>
+            <label for="password">Contraseña:</label><br>
+            <input type="password" name="password" id="password" required><br>
+            <label for="nombre">Nombres:</label><br>
+            <input type="text" name="nombre" id="nombre" required><br>
+            <label for="apellido">Apellidos:</label><br>
+            <input type="text" name="apellido" id="apellido" required><br>
+            <label for="correo">Correo:</label><br>
+            <input type="text" name="correo" id="correo" required><br>
+            <label for="cedula">Cédula:</label><br>
+            <input type="number" name="cedula" id="cedula" required><br>
+            <label for="telefono">Teléfono:</label><br>
+            <input type="number" name="telefono" id="telefono" required><br>
+            <label for="direccion">Dirección:</label><br>
+            <input type="text" name="direccion" id="direccion" required><br>
+            <br><br>
+            <button id="submit" type="submit">Registrarse</button>
+        </fieldset>
+    </form>
+</div>
+</body>
+</html>
