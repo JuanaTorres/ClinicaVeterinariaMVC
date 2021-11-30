@@ -37,7 +37,7 @@ class Controller:
                 flash(rol)
                 return redirect(url_for("validarUsuario"))
             else:
-                print(rol[0][0])
+                print(rol)
                 rol = rol[0][0].lower()
                 return render_template(f'{rol}.html', QTc_result=username)
         return render_template('index.html')
@@ -55,11 +55,10 @@ class Controller:
             direccion = request.form.get("direccion")
             correo = request.form.get("correo")
             rol = request.form.get("rol")
-            print(rol)
             usuario = Usuario.Usuario()
             resultado = usuario.crearUsuario(username, password, cedula, telefono, nombre, apellidos, direccion, correo,
                                              rol)
-            print(resultado)
+
             if resultado != "OK":
                 flash(resultado)
                 return redirect(url_for("crearUsuario"))
