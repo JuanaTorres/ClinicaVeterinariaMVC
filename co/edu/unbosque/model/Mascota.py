@@ -7,51 +7,53 @@ class Mascota:
         self.archivo = Archivo()
 
     def crearMascota(self, nombre, especie, raza, color, peso, fecha, propietario):
-        valorEspecie = self.manejoEspecie(especie)
-        valorRaza = self.manejoRaza(raza)
-        valorColor = self.manejoColor(color)
-        nombre = nombre.low.replace(' ', '')
-        sql = f"SELECT * FROM mascota m where m.nombre={nombre} AND m.especie={valorEspecie} AND m.raza={valorRaza} AND m.color={valorColor} AND m.peso={peso} AND m.fecha_nacimiento={fecha} AND usuario_propietario={propietario}"
+        valorEspecie = self.manejoEspecie(especie.lower())
+        valorRaza = self.manejoRaza(raza.lower())
+        valorColor = self.manejoColor(color.lower())
+        nombre = nombre.lower()
+        sql = f"SELECT * FROM mascota m where m.nombre='{nombre}' AND m.especie='{valorEspecie}' AND m.raza='{valorRaza}' AND m.color='{valorColor}' AND m.peso='{peso}' AND m.fecha_nacimiento='{fecha}' AND usuario_propietario='{propietario}'"
         if (self.archivo.realizarSQL(sql) != []):
             return "Ya existe una mascota con esos datos"
         else:
-            sql = f"INSERT INTO mascota values('{nombre}', '{especie}', '{raza}', '{color}', '{peso}', '{fecha}', '{propietario}'.'A')"
+            cantidad = self.archivo.realizarSQL(f"SELECT count(*) FROM mascota ")
+            cantidad = cantidad[0][0]
+            sql = f"INSERT INTO mascota values('{cantidad+1}','{nombre}', '{valorEspecie}', '{valorRaza}', '{valorColor}', '{peso}', '{fecha}', '{propietario}','A')"
             return self.archivo.realizarInsertSQL(sql)
 
     def manejoEspecie(self, especie):
         consulta = self.archivo.realizarSQL(
-            f"SELECT e.id_especie FROM especie e where e.descripcion='{especie.low.replace(' ', '')}'")
+            f"SELECT e.id_especie FROM especie e where e.descripcion='{especie}'")
         if consulta != []:
-            return consulta
+            return consulta[0][0]
         else:
             cantidad = self.archivo.realizarSQL(f"SELECT count(*) FROM especie e")
             cantidad = cantidad[0][0]
             self.archivo.realizarInsertSQL(
-                f"insert into especie values('{cantidad + 1}','{especie.low.replace(' ', '')}','A')")
+                f"insert into especie values('{cantidad + 1}','{especie}','A')")
             return cantidad + 1
 
     def manejoColor(self, color):
         consulta = self.archivo.realizarSQL(
-            f"SELECT c.id_color FROM color c where c.descripcion='{color.low.replace(' ', '')}'")
+            f"SELECT c.id_color FROM color c where c.descripcion='{color}'")
         if (consulta != []):
-            return consulta
+            return consulta[0][0]
         else:
             cantidad = self.archivo.realizarSQL(f"SELECT count(*) FROM color c")
             cantidad = cantidad[0][0]
             self.archivo.realizarInsertSQL(
-                f"insert into color values('{cantidad + 1}','{color.low.replace(' ', '')}','A')")
+                f"insert into color values('{cantidad + 1}','{color}','A')")
             return cantidad + 1
 
     def manejoRaza(self, raza):
         consulta = self.archivo.realizarSQL(
-            f"SELECT r.id_raza FROM raza r WHERE r.descripcion='{raza.low.replace(' ', '')}'")
+            f"SELECT r.id_raza FROM raza r WHERE r.descripcion='{raza}'")
         if (consulta != []):
-            return consulta
+            return consulta[0][0]
         else:
             cantidad = self.archivo.realizarSQL(f"SELECT count(*) FROM raza r")
             cantidad = cantidad[0][0]
             self.archivo.realizarInsertSQL(
-                f"insert into raza values('{cantidad + 1}','{raza.low.replace(' ', '')}','A')")
+                f"insert into raza values('{cantidad + 1}','{raza}','A')")
             return cantidad + 1
 
     def obtenerMascotas(self):

@@ -27,8 +27,8 @@ class Servicio:
             self.archivo.realizarInsertSQL(sql8)
             self.archivo.realizarInsertSQL(sql9)
     def validarID(self, id):
-        r= self.archivo.realizarInsertSQL(f"selet * from servicio s where s.id_servicio='{id}'")
+        r= self.archivo.realizarInsertSQL(f"select * from servicio s where s.id_servicio='{id}'")
         if r==[] or r=="Ocurrio un error":
             return "Ocurrio un error"
         else:
-            return 'OK'
+            return "OK"

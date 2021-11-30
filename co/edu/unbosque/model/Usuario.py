@@ -65,4 +65,11 @@ class Usuario:
             return "No existe el nombre de usuario"
         else:
             return self.archivo.realizarInsertSQL(
-                f"update * from usuario u set u.direccion='{direccion}' where u.username='{username}'")
+                f"update usuario u set direccion='{direccion}' where u.username='{username}'")
+    def obtenerRol(self, username):
+        consulta = f"select r.descripcion from rol r,  usuario u where u.username='{username}' and r.id_rol=u.rol"
+        resultado = self.archivo.realizarSQL(consulta)
+        if (resultado == []):
+            return "No existen usuarios"
+        else:
+            return resultado[0][0]

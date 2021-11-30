@@ -60,7 +60,7 @@
         </li>
         <li class="nav-item">
             <a class="nav-link" id="pago-tab" data-toggle="tab" href="#pago" role="tab" aria-controls="pago"
-               aria-selected="false" aria-disabled="true">Pago de factura </a>
+               aria-selected="false" >Pago de factura </a>
         </li>
         <li class="nav-item">
             <a class="nav-link" id="find-tab" data-toggle="tab" href="#find" role="tab" aria-controls="find"
@@ -81,9 +81,16 @@
         <div class="configureStyleMainForms">
 
             <!--Form for creation of owner's pet-->
-            <form action="/crearMascota" autocomplete="off" id="formC" name="formC">
+            <form action="/propietario.html" method="POST" autocomplete="on" id="formC" name="formC">
                 <fieldset>
                     <legend> Formulario de Registro de mascotas</legend>
+                    <label for="username">Nombre usuario</label><br>
+                    {% if QTc_result %}
+                    <input type="text" name="username" id="username" value="{{QTc_result}}"
+                           readonly="readonly" required>
+                    {% endif %}
+                    <br>
+                    <br>
                     <label for="name">Ingrese su nombre de la mascota:</label><br>
                     <input type="text" name="name" size="30" id="name" placeholder="Ej: Sammy" required>
                     <br>
@@ -91,8 +98,8 @@
                     <label for="species">Seleccione la especie:</label><br>
                     <select name="species" id="species" required>
                         <option value="" selected="selected">Seleccione</option>
-                        <option value="1">Canino</option>
-                        <option value="2">Felino</option>
+                        <option value="Canino">Canino</option>
+                        <option value="Felino">Felino</option>
                     </select>
                     <br>
                     <br>
@@ -105,7 +112,7 @@
                     <br>
                     <br>
                     <label for="color">Ingrese el color de pelaje de su mascota:</label><br>
-                    <input type="number" name="color" maxlength="2" id="color" placeholder="Ej: Blanco " required>
+                    <input type="text" name="color" maxlength="25" id="color" placeholder="Ej: Blanco " required>
                     <br>
                     <br>
                     <label for="fecha">Ingrese la fecha de nacimiento:</label><br>
@@ -142,21 +149,21 @@
     </div>
     <div class="tab-pane fade" id="detalle" role="tabpanel" aria-labelledby="detalle-tab" align="center">
         <div class="configureStyleMainForms">
-            <form name="detalle1" autocomplete="off" id="detalle1">
+            <form name="detalle1" method="POST" autocomplete="off" id="detalle1">
                 <fieldset>
                     <legend> Detalle de factura</legend>
                     <br>
                     <label for="nfactura">N# de factura</label><br>
-                    <input type="text" name="nfactura" id="nfactura" disabled
+                    <input type="text" name="nfactura" id="nfactura" readonly="readonly"
                            required>
                     <br>
                     <label for="fechaD">Fecha de factura:</label><br>
-                    <input type="date" name="fechaD" id="fechaD" disabled
+                    <input type="date" name="fechaD" id="fechaD" readonly="readonly"
                            required>
                     <br>
                     <br>
                     <label for="total">Total:</label><br>
-                    <input type="text" name="total" id="total" disabled
+                    <input type="text" name="total" id="total" readonly="readonly"
                            required>
                     <br>
                     <br>
@@ -179,20 +186,32 @@
     <div class="tab-pane fade" id="pago" role="tabpanel" aria-labelledby="pago-tab" align="center">
         <div class="configureStyleMainForms">
             <h2 class="titles">Pagar facturas del Propietario</h2>
-            <form action="/pagar" name="pfacturas" autocomplete="off" id="pfactura">
+            <form action="/pagar" method="POST" name="pfacturas" autocomplete="off" id="pfactura">
                 <fieldset>
                     <legend> Datos para pagar</legend>
+                    <br>
+                    <label for="usernamep">Nombre usuario</label><br>
+                    {% if QTc_result %}
+                    <input type="text" name="usernamep" id="usernamep" value="{{QTc_result}}"
+                           readonly="readonly" required>
+                    {% endif %}
+                    <br>
+                    <br>
+                    <label for="nfactu">Número de la factura:</label><br>
+                    <input type="number" name="nfactu" size="30" id="nfactu" readonly="readonly"
+                           required>
+                    <br>
                     <br>
                     <label for="forma">Seleccione la forma de pago:</label><br>
                     <select name="forma" id="forma" required>
                         <option value="" selected="selected">Seleccione</option>
-                        <option value="1">Efectivo</option>
-                        <option value="2">Tarjetas de crédito</option>
-                        <option value="3">Tarjetas de débito</option>
+                        <option value="Efectivo">Efectivo</option>
+                        <option value="Tarjetas de crédito">Tarjetas de crédito</option>
+                        <option value="Tarjetas de débito">Tarjetas de débito</option>
                     </select>
                     <br>
                     <label for="ptotal">Total a pagar:</label><br>
-                    <input type="text" name="ptotal" size="30" id="ptotal" disabled
+                    <input type="text" name="ptotal" size="30" id="ptotal" readonly="readonly"
                            required>
                     <br>
                     <br>
@@ -227,14 +246,14 @@
     </div>
     <div class="tab-pane fade" id="Upuser" role="tabpanel" aria-labelledby="Upuser-tab" align="center">
         <div class="configureStyleMainForms">
-            <form action="/cambiarDirrecion" name="formUser" autocomplete="off" id="formUser">
+            <form action="/cambiarDirrecion" method="POST" name="formUser" autocomplete="off" id="formUser">
                 <fieldset>
                     <legend> Formulario de Actualizar Datos del Propietario</legend>
                     <br>
-                    <label for="username">Nombre usuario</label><br>
+                    <label for="username1">Nombre usuario</label><br>
                     {% if QTc_result %}
-                    <input type="text" name="username" id="username" value="{{QTc_result}}"
-                           disabled required>
+                    <input type="text" name="username1" id="username1" value="{{QTc_result}}"
+                           readonly="readonly" required>
                     {% endif %}
                     <br>
                     <label for="dirección">Digite la dirección:</label><br>

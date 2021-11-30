@@ -79,7 +79,7 @@
 
                     {% if QTc_result %}
                     <input type="text" name="usernameR" id="usernameR" value="{{QTc_result}}"
-                           disabled required>
+                           readonly="readonly" required>
                     {% endif %}
                     <br>
                     <br>
@@ -87,12 +87,16 @@
                     <input type="date" name="fechaR" id="fechaR" required>
                     <br>
                     <br>
-                    <label for="idmascota">Id de Mascota</label><br>
-                    <input type="text" name="idmascota" size="30" id="idmascota" placeholder="Ej: 12">
+                    <label >Id de Mascota</label><br>
+                    <select name=idmascota required >
+                        {% for colour  in colour  %}
+                        <option value="{{colour }}" SELECTED >{{colour }}</option>
+                        {% endfor %}
+                    </select>
                     <br>
                     <br>
                     <label for="descrip">Descripción de la visita:</label><br>
-                    <textarea name="descrip" id="descrip" rows="10"
+                    <textarea name="descrip" id="descrip" rows="10" maxlength="50"
                               cols="50">Ej: Cita de control de esterilización</textarea>
                     <br>
                     <br>
@@ -126,35 +130,47 @@
     <div class="tab-pane fade" id="vfactura" role="tabpanel" aria-labelledby="vfactura-tab" align="center">
         <div class="configureStyleMainBox">
 
-            <form action="/gfactura" name="formUser" autocomplete="off" id="formFactura">
+            <form action="/gfactura" method="POST" name="formUser" autocomplete="off" id="formFactura">
                 <fieldset>
                     <legend> Generar Factura Por Registro</legend>
+                    <br>
+                    <label for="usernamef">Nombre usuario</label><br>
+
+                    {% if QTc_result %}
+                    <input type="text" name="usernamef" id="usernamef" value="{{QTc_result}}"
+                           readonly="readonly" required>
+                    {% endif %}
+                    <br>
                     <br>
                     <label for="fechaf">Fecha de la factura: </label><br>
                     <input type="date" name="fechaf" id="fechaf" required>
                     <br>
                     <br>
-                    <label for="registroID">ID de registro: </label><br>
-                    <input type="text" name="registroID" id="registroID" required>
+                    <label >ID de registro: </label><br>
+                    <select name=registroID id="registroID"required>
+                        {% for regis  in regis  %}
+                        <option value="{{regis}}" SELECTED >{{regis}}</option>
+                        {% endfor %}
+                    </select>
                     <br>
                     <br>
                     <label for="TotalF">Total:</label><br>
-                    <input type="text" name="TotalF" id="TotalF" required disabled>
+                    <input type="text" name="TotalF" id="TotalF" required readonly="readonly">
                     <br>
                     <br>
                     <div style="float:center; width: 100%;">
                         <div align="left" style="float:left; width: 50%;">
-                            <label for="addressUser">Servicios prestados:</label><br>
-                            <input type="checkbox" id="n1" onclick="checkServicios()"> Administración de medicamentos
+                            <label >Servicios prestados:</label><br>
+                            <input type="checkbox" name="n1" id="n1" value="1" onclick="checkServicios()"> Administración de medicamentos
                             <p></p>
-                            <input type="checkbox" id="n2" onclick="checkServicios()"> Vacunas <p></p>
-                            <input type="checkbox" id="n3" onclick="checkServicios()"> Baño <p></p>
-                            <input type="checkbox" id="n4" onclick="checkServicios()"> Consulta <p></p>
-                            <input type="checkbox" id="n5" onclick="checkServicios()"> Hospitalización <p></p>
-                            <input type="checkbox" id="n6" onclick="checkServicios()"> Cirugía <p></p>
-                            <input type="checkbox" id="n7" onclick="checkServicios()"> Desparasitación inyección <p></p>
-                            <input type="checkbox" id="n8" onclick="checkServicios()"> Desparasitación tabletas <p></p>
-                            <input type="checkbox" id="n9" onclick="checkServicios()"> Cremación
+                            <input type="checkbox" name="n2" id="n2" value="2" onclick="checkServicios()"> Vacunas <p></p>
+                            <input type="checkbox" name="n3" id="n3" value="3" onclick="checkServicios()"> Baño <p></p>
+                            <input type="checkbox" name="n4" id="n4" value="4" onclick="checkServicios()"> Consulta <p></p>
+                            <input type="checkbox" name="n5" id="n5" value="5" onclick="checkServicios()"> Hospitalización <p></p>
+                            <input type="checkbox" name="n6" id="n6" value="6" onclick="checkServicios()"> Cirugía <p></p>
+                            <input type="checkbox" name="n7" id="n7" value="7" onclick="checkServicios()"> Desparasitación inyección <p></p>
+                            <input type="checkbox" name="n8" id="n8" value="8" onclick="checkServicios()"> Desparasitación tabletas <p></p>
+                            <input type="checkbox" name="n9" id="n9" value="9" onclick="checkServicios()"> Cremación
                         </div>
                         <div align="center" style="float:left; width: 50%;">
                             <label>Tarifa:</label><br>
@@ -184,27 +200,27 @@
     <div class="tab-pane fade" id="UpVet" role="tabpanel" aria-labelledby="UpVet-tab" align="center">
         <div class="configureStyleMainForms">
 
-            <form action="/cambiarDirrecion" name="formUser" autocomplete="off" id="formUser">
+            <form action="/cambiarDirrecion" method="POST" name="formUser" autocomplete="off" id="formUser">
                 <fieldset>
                     <legend> Formulario de Actualizar datos de la Veterinaria</legend>
                     <br>
-                    <label for="username">Nombre usuario</label><br>
+                    <label for="username1">Nombre usuario</label><br>
 
                     {% if QTc_result %}
-                    <input type="text" name="username" id="username" value="{{QTc_result}}"
-                           disabled required>
+                    <input type="text" name="username1" id="username1" value="{{QTc_result}}"
+                           readonly="readonly" required>
                     {% endif %}
                     <br>
                     <br>
-                    <label for="addressUser">Digite la dirección:</label><br>
-                    <input type="text" name="addressUser" size="30" id="addressUser"
+                    <label for="dirección">Digite la dirección:</label><br>
+                    <input type="text" name="dirección" size="30" id="dirección"
                            placeholder="Ej: Cr 7 # 100 - 10"
                            required>
                     <br>
                     <br>
 
                     <p align="center">
-                        <button type="button" id="Uuser">Actualizar datos</button>
+                        <button type="submit" id="Uuser">Actualizar datos</button>
                     </p>
                 </fieldset>
             </form>
@@ -253,6 +269,8 @@ function checkServicios(){
 
 
 
+
 </script>
+
 </body>
 </html>

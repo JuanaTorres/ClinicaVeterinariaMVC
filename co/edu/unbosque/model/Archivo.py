@@ -19,7 +19,6 @@ class Archivo:
             cursor.execute(sql)
 
             all_values = cursor.fetchall()
-
             cursor.close()
             connection.close()
         except Exception as e:
