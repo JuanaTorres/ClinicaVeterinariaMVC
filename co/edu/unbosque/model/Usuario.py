@@ -30,22 +30,22 @@ class Usuario:
         if self.archivo.realizarSQL(f"SELECT * FROM telefono t WHERE t.num_tel='{telefono}'") != []:
             return "Ya existe ese telefono en otro usuario"
         if rol.upper() == "VETERINARIO":
-            if self.archivo.realizarSQL("select * from rol r where r.id_rol=1") == []:
-                self.archivo.realizarInsertSQL(f"insert into rol values('1','{rol.upper()}','A')")
-            self.archivo.realizarInsertSQL(f"insert into telefono values('{cantidadTelefonos + 1}','{telefono}','A')")
-            sql = f"insert into usuario values('{username}','{password}','{cedula}','{cantidadTelefonos + 1}','{nombre}','{apellidos}','{direccion}','{correo}','A',1)"
-            r = self.archivo.realizarInsertSQL(sql)
-            if r != "Ok":
-                self.archivo.realizarInsertSQL(
-                    f"delete telefono where id_tel='{cantidadTelefonos + 1}'")
-            return r
-        elif rol.upper() == "PROPIETARIO":
             if self.archivo.realizarSQL("select * from rol r where r.id_rol=2") == []:
                 self.archivo.realizarInsertSQL(f"insert into rol values('2','{rol.upper()}','A')")
             self.archivo.realizarInsertSQL(f"insert into telefono values('{cantidadTelefonos + 1}','{telefono}','A')")
             sql = f"insert into usuario values('{username}','{password}','{cedula}','{cantidadTelefonos + 1}','{nombre}','{apellidos}','{direccion}','{correo}','A',2)"
             r = self.archivo.realizarInsertSQL(sql)
-            if r != "Ok":
+            if r != "OK":
+                self.archivo.realizarInsertSQL(
+                    f"delete telefono where id_tel='{cantidadTelefonos + 1}'")
+            return r
+        elif rol.upper() == "PROPIETARIO":
+            if self.archivo.realizarSQL("select * from rol r where r.id_rol=3") == []:
+                self.archivo.realizarInsertSQL(f"insert into rol values('3','{rol.upper()}','A')")
+            self.archivo.realizarInsertSQL(f"insert into telefono values('{cantidadTelefonos + 1}','{telefono}','A')")
+            sql = f"insert into usuario values('{username}','{password}','{cedula}','{cantidadTelefonos + 1}','{nombre}','{apellidos}','{direccion}','{correo}','A',3)"
+            r = self.archivo.realizarInsertSQL(sql)
+            if r != "OK":
                 self.archivo.realizarInsertSQL(
                     f"delete telefono where id_tel='{cantidadTelefonos + 1}'")
             return r
@@ -56,7 +56,7 @@ class Usuario:
         consulta = "select r.descripcion , count(u.rol) from rol r, usuario u where u.rol = r.id_rol group by 1"
         resultado = self.archivo.realizarSQL(consulta)
         if (resultado == []):
-            return "No existe esa mascota"
+            return "No existen usuarios"
         else:
             return resultado
 

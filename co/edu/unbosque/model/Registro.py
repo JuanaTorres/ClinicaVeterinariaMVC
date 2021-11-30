@@ -25,7 +25,7 @@ class Registro:
             return resultado
 
     def obtenerRegistro(self, usuarioV):
-        consulta = f"select r.id_registro , r.fecha, r.descripcion ,r.id_mascota from registrohistorico r where r.usuario_veterinario={usuarioV} AND r.estado='A' "
+        consulta = f"select r.id_registro , r.fecha, r.descripcion ,r.id_mascota from registrohistorico r where r.usuario_veterinario='{usuarioV}' AND r.estado='A' "
         resultado = self.archivo.realizarSQL(consulta)
         if (resultado == []):
             return "No existe datos"
