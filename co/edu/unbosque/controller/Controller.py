@@ -39,7 +39,7 @@ class Controller:
             else:
                 print(rol[0][0])
                 rol = rol[0][0].lower()
-                return render_template(f'{rol}.html')
+                return render_template(f'{rol}.html', QTc_result=username)
         return render_template('index.html')
 
     @staticmethod

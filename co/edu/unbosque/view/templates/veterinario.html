@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Four Pets Citizens</title>
+    <title>Clinica Veterinaria</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
@@ -25,25 +25,39 @@
             crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css">
     <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
-    <script src="Javascript/vet.js" type="module"></script>
-    <link rel="stylesheet" href="CSS/vet.css" type="text/css">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='/CSS/vet.css') }}">
 </head>
-<!--Navigation of the vet interface-->
+{% block content %}
+<div class="container">
+    {% for message in get_flashed_messages() %}
+    <div class="alert alert-warning">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        {{ message }}
+    </div>
+    {% endfor %}
+
+    {% block page_content %}{% endblock %}
+</div>
+{% endblock %}
 <nav>
     <ul class="nav nav-tabs" id="myTab" role="tablist">
         <li class="nav-item">
             <a id="LoginButton" href='index.html'>
-                <img src="imgs/home.png" width="40px" height="40px">
+                <img src="{{ url_for('static', filename='/imgs/home.png') }}" width="40px" height="40px">
             </a>
         </li>
         <li class="nav-item">
             <a class="nav-link active" id="registerVisit-tab" data-toggle="tab" href="#registerVisit" role="tab"
-               aria-controls="registerVisit" aria-selected="true">Crear Visita</a>
+               aria-controls="registerVisit" aria-selected="true">Crear Registro</a>
         </li>
         <li class="nav-item">
             <a class="nav-link" id="VisitTablePet-tab" data-toggle="tab" href="#VisitTablePet" role="tab"
                aria-controls="VisitTablePet"
-               aria-selected="false">Tabla de Visitas</a>
+               aria-selected="false">Tabla de Registros</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="vfactura-tab" data-toggle="tab" href="#vfactura" role="tab" aria-controls="vfactura"
+               aria-selected="false">Generar Factura</a>
         </li>
         <li class="nav-item">
             <a class="nav-link" id="UpVet-tab" data-toggle="tab" href="#UpVet" role="tab" aria-controls="UpVet"
@@ -58,85 +72,50 @@
     <div class="tab-pane fade show active" id="registerVisit" role="tabpanel" aria-labelledby="registerVisit-tab"
          align="center">
         <div class="configureStyleMainForms">
-
-            <!--Form to create a new visit in the vet-->
-            <form action="CreatVisitsform" autocomplete="off" id="formVC" name="formVC">
+            <form action="/registro" method="POST" autocomplete="off" id="formVC" name="formVC">
                 <fieldset>
-                    <legend> Formulario de Registro de Visitas</legend>
-                    <label for="CreatAt">Fecha de la visita: </label><br>
-                    <input type="date" name="CreatAt" id="CreatAt" required>
-                    <br>
-                    <br>
-                    <label for="type">Motivo de la visita: </label><br>
-                    <select name="type" id="type" required>
-                        <option value="" selected="selected">Seleccione</option>
-                        <option value="2">Esterilización</option>
-                        <option value="3">Implantación de microchip</option>
-                        <option value="4">Vacunación</option>
-                        <option value="5">Desparasitación</option>
-                        <option value="6">Urgencia</option>
-                        <option value="7">Control</option>
-                    </select>
-                    <br>
-                    <br>
-                    <label for="microchip">Microchip de Mascota</label><br>
-                    <input type="text" name="microchip" size="30" id="microchip" placeholder="Ej: 123456789" disabled>
+                    <legend> Formulario de Registro Historico</legend>
+                    <label for="usernameR">Nombre usuario</label><br>
 
+                    {% if QTc_result %}
+                    <input type="text" name="usernameR" id="usernameR" value="{{QTc_result}}"
+                           disabled required>
+                    {% endif %}
                     <br>
                     <br>
-                    <label for="description">Descripción de la visita</label><br>
-                    <input type="text" name="description" size="30" id="description"
-                           placeholder="Ej: Cita de control de esterilización">
+                    <label for="fechaR">Fecha de la visita: </label><br>
+                    <input type="date" name="fechaR" id="fechaR" required>
                     <br>
                     <br>
-                    <label for="petId">Identificación de Mascota</label><br>
-                    <input type="text" name="petId" size="30" id="petId" placeholder="Ej: 123456789">
+                    <label for="idmascota">Id de Mascota</label><br>
+                    <input type="text" name="idmascota" size="30" id="idmascota" placeholder="Ej: 12">
+                    <br>
+                    <br>
+                    <label for="descrip">Descripción de la visita:</label><br>
+                    <textarea name="descrip" id="descrip" rows="10"
+                              cols="50">Ej: Cita de control de esterilización</textarea>
                     <br>
                     <br>
                     <p align="center">
-                        <button type="button" id="Cpets">Crear Visita</button>
+                        <button type="submit" id="Cpets">Crear Visita</button>
                     </p>
                 </fieldset>
             </form>
         </div>
     </div>
+
     <div class="tab-pane fade" id="VisitTablePet" role="tabpanel" aria-labelledby="VisitTablePet-tab" align="center">
         <div class="configureStyleMainBox">
-            <h3 class="titles">Busqueda de visitas por fechas y nombre de la mascota</h3>
-            <h5>Filtrar</h5>
-
-            <!-- Filters of Date and pet name to search the visits of this pet-->
-            <form name="formTCV" id="formTCV">
-                <label for="Date1"> Primer rango de fecha</label><br>
-                <input type="Date" name="Date1" size="30" id="Date1" required>
-                <br>
-                <br>
-                <label for="Date2"> Segundo rango de fecha</label><br>
-                <input type="Date" name="Date2" size="30" id="Date2" required>
-                <br>
-                <br>
-                <label for="PetName">Nombre de la mascota</label><br>
-                <input type="text" name="PetName" size="30" id="PetName" required>
-                <br>
-                <br>
-                <button class="btn btn-rounded btn-primary" id="filter" type="button">Filtrar</button>
-            </form>
 
             <div class="TableVisit" id="TableVisit">
-                <h2 class="titles">Tabla de Visitas de Mascotas</h2>
-
-                <!--Table that shows the visits of a pet in the vet-->
+                <h2 class="titles">Tabla de Registros Historicos de Mascotas</h2>
                 <table id="myTablePets" class="table table-fluid">
                     <thead>
                     <tr>
-                        <th scope="col">Identificación de la Visita</th>
-                        <th scope="col">Fecha de la visita</th>
-                        <th scope="col">Tipo de la visita</th>
+                        <th scope="col">Identificación de la Registo</th>
+                        <th scope="col">Fecha del registro</th>
                         <th scope="col">Descripción</th>
-                        <th scope="col">Microchip</th>
-                        <th scope="col">Nombre de la Veterinaria</th>
-                        <th scope="col">Identificación de la Mascota</th>
-                        <th scorpe="col">Nombre de la mascota</th>
+                        <th scope="col">Id Mascota</th>
                     </tr>
                     </thead>
                 </table>
@@ -144,43 +123,82 @@
 
         </div>
     </div>
+    <div class="tab-pane fade" id="vfactura" role="tabpanel" aria-labelledby="vfactura-tab" align="center">
+        <div class="configureStyleMainBox">
+
+            <form action="/gfactura" name="formUser" autocomplete="off" id="formFactura">
+                <fieldset>
+                    <legend> Generar Factura Por Registro</legend>
+                    <br>
+                    <label for="fechaf">Fecha de la factura: </label><br>
+                    <input type="date" name="fechaf" id="fechaf" required>
+                    <br>
+                    <br>
+                    <label for="registroID">ID de registro: </label><br>
+                    <input type="text" name="registroID" id="registroID" required>
+                    <br>
+                    <br>
+                    <label for="TotalF">Total:</label><br>
+                    <input type="text" name="TotalF" id="TotalF" required disabled>
+                    <br>
+                    <br>
+                    <div style="float:center; width: 100%;">
+                        <div align="left" style="float:left; width: 50%;">
+                            <label for="addressUser">Servicios prestados:</label><br>
+                            <input type="checkbox" id="n1" onclick="checkServicios()"> Administración de medicamentos
+                            <p></p>
+                            <input type="checkbox" id="n2" onclick="checkServicios()"> Vacunas <p></p>
+                            <input type="checkbox" id="n3" onclick="checkServicios()"> Baño <p></p>
+                            <input type="checkbox" id="n4" onclick="checkServicios()"> Consulta <p></p>
+                            <input type="checkbox" id="n5" onclick="checkServicios()"> Hospitalización <p></p>
+                            <input type="checkbox" id="n6" onclick="checkServicios()"> Cirugía <p></p>
+                            <input type="checkbox" id="n7" onclick="checkServicios()"> Desparasitación inyección <p></p>
+                            <input type="checkbox" id="n8" onclick="checkServicios()"> Desparasitación tabletas <p></p>
+                            <input type="checkbox" id="n9" onclick="checkServicios()"> Cremación
+                        </div>
+                        <div align="center" style="float:left; width: 50%;">
+                            <label>Tarifa:</label><br>
+                            <p>$15.000</p>
+                            <p>$20.000</p>
+                            <p>$18.000</p>
+                            <p>$10.000</p>
+                            <p>$18.000</p>
+                            <p>$25.000</p>
+                            <p>$12.000</p>
+                            <p>$9.000</p>
+                            <p>$8.000</p>
+                        </div>
+                    </div>
+                    <div>
+                        <br>
+                        <br>
+                        <p align="center">
+                            <button type="submit" id="cfactura">Crear Factura</button>
+                        </p>
+                    </div>
+                </fieldset>
+            </form>
+
+        </div>
+    </div>
     <div class="tab-pane fade" id="UpVet" role="tabpanel" aria-labelledby="UpVet-tab" align="center">
         <div class="configureStyleMainForms">
 
-            <!--Form to update the vet's user data-->
-            <form name="formUser" autocomplete="off" id="formUser">
+            <form action="/cambiarDirrecion" name="formUser" autocomplete="off" id="formUser">
                 <fieldset>
                     <legend> Formulario de Actualizar datos de la Veterinaria</legend>
                     <br>
-                    <label for="neighborhoodUser">Seleccione la localidad:</label><br>
-                    <select id="neighborhoodUser" name="neighborhoodUser" required>
-                        <option value="" selected="selected">Seleccione</option>
-                        <option value="2">Usaquen</option>
-                        <option value="3">Chapinero</option>
-                        <option value="4">Santa Fe</option>
-                        <option value="5">San Cristobal</option>
-                        <option value="6">Usme</option>
-                        <option value="7">Tunjuelito</option>
-                        <option value="8">Bosa</option>
-                        <option value="9">Kennedy</option>
-                        <option value="10">Fontibon</option>
-                        <option value="11">Engativa</option>
-                        <option value="12">Suba</option>
-                        <option value="13">Barrios Unidos</option>
-                        <option value="14">Teusaquillo</option>
-                        <option value="15">Los Martires</option>
-                        <option value="16">Antonio Nariño</option>
-                        <option value="17">Puente Aranda</option>
-                        <option value="18">La Candelaria</option>
-                        <option value="19">Uribe</option>
-                        <option value="20">Ciudad Bolivar</option>
-                        <option value="21">Sumapaz</option>
-                        <option value="22">Municipios aledaños</option>
-                    </select>
+                    <label for="username">Nombre usuario</label><br>
+
+                    {% if QTc_result %}
+                    <input type="text" name="username" id="username" value="{{QTc_result}}"
+                           disabled required>
+                    {% endif %}
                     <br>
                     <br>
                     <label for="addressUser">Digite la dirección:</label><br>
-                    <input type="text" name="addressUser" size="30" id="addressUser" placeholder="Ej: Cr 7 # 100 - 10"
+                    <input type="text" name="addressUser" size="30" id="addressUser"
+                           placeholder="Ej: Cr 7 # 100 - 10"
                            required>
                     <br>
                     <br>
@@ -193,5 +211,37 @@
         </div>
     </div>
 </div>
+<script>
+checkServicios()
+function checkServicios(){
+    var suma=0;
+    if(document.getElementById("n1").checked){
+     suma=15000+suma;
+    }if(document.getElementById("n2").checked){
+     suma=20000+suma;
+    }if(document.getElementById("n3").checked){
+     suma=18000+suma;
+    }if(document.getElementById("n4").checked){
+     suma=10000+suma;
+    }if(document.getElementById("n5").checked){
+     suma=18000+suma;
+    }if(document.getElementById("n6").checked){
+     suma=25000+suma;
+    }if(document.getElementById("n7").checked){
+     suma=12000+suma;
+    }if(document.getElementById("n8").checked){
+     suma=9000+suma;
+    }if(document.getElementById("n9").checked){
+     suma=8000+suma;
+    }else if(suma==0){
+    suma="Seleccione los servicios"
+    }
+    document.getElementById("TotalF").value=suma;
+}
+
+
+
+
+</script>
 </body>
 </html>

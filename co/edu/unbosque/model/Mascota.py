@@ -1,9 +1,9 @@
-import Archivo
+from co.edu.unbosque.model.Archivo import Archivo
 
 class Mascota:
 
     def __init__(self):
-        self.archivo = Archivo.Archivo()
+        self.archivo = Archivo()
 
     def crearMascota(self, nombre, especie, raza, color, peso, fecha, propietario):
         valorEspecie = self.manejoEspecie(especie)
@@ -61,15 +61,22 @@ class Mascota:
         else:
             return resultado
 
-    def obtenerMascotaPorID(self, id):
-        consulta = f"select m.id_mascota, m.nombre, e.descripcion, r.descripcion, c.descripcion, m.peso, m.fecha_nacimiento, m.usuario_propietario from mascota m, especie e, raza r, color c where m.especie=e.id_especie AND m.raza=r.id_raza AND m.color=c.id_color AND m.estado='A' group by m.id_mascota, m.nombre, e.descripcion, r.descripcion, c.descripcion, m.peso, m.fecha_nacimiento, m.usuario_propietario AND m.id_mascota={id}"
+    def obtenerMascotasID(self):
+        consulta = f"select m.id_mascota from mascota m where m.estado='A'"
         resultado = self.archivo.realizarSQL(consulta)
         if (resultado == []):
             return "No existe esa mascota"
         else:
             return resultado
     def obtenerMascotasporPropietario(self):
-        consulta=f"select m.usuario_propietario, count(*) from mascota m group by 1"
+        consulta=f"select m.usuario_propietario, count(*) from mascota m where m.estado='A' group by 1"
+        resultado = self.archivo.realizarSQL(consulta)
+        if (resultado == []):
+            return "No existe esa mascota"
+        else:
+            return resultado
+    def obtenerMascotasporUsuario(self,username):
+        consulta = f"select m.id_mascota as id, m.nombre as nombre , e.descripcion as especie , r.descripcion as raza, c.descripcion as color, m.peso as peso, m.fecha_nacimiento as fecha_nacimiento , m.usuario_propietario as propietario from mascota m, especie e, raza r, color c where m.especie=e.id_especie AND m.raza=r.id_raza AND m.color=c.id_color AND m.estado='A' AND m.usuario_propietario={username} group by m.id_mascota, m.nombre, e.descripcion, r.descripcion, c.descripcion, m.peso, m.fecha_nacimiento, m.usuario_propietario"
         resultado = self.archivo.realizarSQL(consulta)
         if (resultado == []):
             return "No existe esa mascota"

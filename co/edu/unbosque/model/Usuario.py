@@ -34,17 +34,24 @@ class Usuario:
                 self.archivo.realizarInsertSQL(f"insert into rol values('1','{rol.upper()}','A')")
             self.archivo.realizarInsertSQL(f"insert into telefono values('{cantidadTelefonos + 1}','{telefono}','A')")
             sql = f"insert into usuario values('{username}','{password}','{cedula}','{cantidadTelefonos + 1}','{nombre}','{apellidos}','{direccion}','{correo}','A',1)"
-            self.archivo.realizarInsertSQL(sql)
-            return "OK"
+            r = self.archivo.realizarInsertSQL(sql)
+            if r != "Ok":
+                self.archivo.realizarInsertSQL(
+                    f"delete telefono where id_tel='{cantidadTelefonos + 1}'")
+            return r
         elif rol.upper() == "PROPIETARIO":
-            if self.archivo.realizarSQL("select * from rol r where r.id_rol=1") == []:
+            if self.archivo.realizarSQL("select * from rol r where r.id_rol=2") == []:
                 self.archivo.realizarInsertSQL(f"insert into rol values('2','{rol.upper()}','A')")
             self.archivo.realizarInsertSQL(f"insert into telefono values('{cantidadTelefonos + 1}','{telefono}','A')")
             sql = f"insert into usuario values('{username}','{password}','{cedula}','{cantidadTelefonos + 1}','{nombre}','{apellidos}','{direccion}','{correo}','A',2)"
-            self.archivo.realizarInsertSQL(sql)
-            return "OK"
+            r = self.archivo.realizarInsertSQL(sql)
+            if r != "Ok":
+                self.archivo.realizarInsertSQL(
+                    f"delete telefono where id_tel='{cantidadTelefonos + 1}'")
+            return r
         else:
             return "No es posible crear el usuario"
+
     def obtenerUsuarioporTipo(self):
         consulta = "select r.descripcion , count(u.rol) from rol r, usuario u where u.rol = r.id_rol group by 1"
         resultado = self.archivo.realizarSQL(consulta)
@@ -52,3 +59,10 @@ class Usuario:
             return "No existe esa mascota"
         else:
             return resultado
+
+    def actualizarDireccion(self, username, direccion):
+        if self.archivo.realizarSQL(f"SELECT u.rol FROM usuario u WHERE u.username='{username}'") == []:
+            return "No existe el nombre de usuario"
+        else:
+            return self.archivo.realizarInsertSQL(
+                f"update * from usuario u set u.direccion='{direccion}' where u.username='{username}'")

@@ -1,8 +1,7 @@
 <html>
 
 <head>
-
-    <title>Four Pets Citizens</title>
+    <title>Clinica Veterinaria</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -26,15 +25,25 @@
             crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css">
     <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
-    <script src="Javascript/owner.js" type="module"></script>
-    <link rel="stylesheet" href="CSS/owner.css" type="text/css">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='/CSS/owner.css') }}">
 </head>
-<!-- Navigation of the owner interface -->
+{% block content %}
+<div class="container">
+    {% for message in get_flashed_messages() %}
+    <div class="alert alert-warning">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        {{ message }}
+    </div>
+    {% endfor %}
+
+    {% block page_content %}{% endblock %}
+</div>
+{% endblock %}
 <nav>
     <ul class="nav nav-tabs" id="myTab" role="tablist">
         <li class="nav-item">
             <a id="LoginButton" href='index.html'>
-                <img src="imgs/home.png" width="40px" height="40px">
+                <img src="{{ url_for('static', filename='./imgs/home.png') }}" width="40px" height="40px">
             </a>
         </li>
         <li class="nav-item">
@@ -43,20 +52,19 @@
         </li>
         <li class="nav-item">
             <a class="nav-link" id="update-tab" data-toggle="tab" href="#update" role="tab" aria-controls="update"
-               aria-selected="false">Actualizar Mascota</a>
+               aria-selected="false">Facturas </a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" id="petCase-tab" data-toggle="tab" href="#petCase" role="tab" aria-controls="petCase"
-               aria-selected="false">Crear Caso</a>
+            <a class="nav-link" id="detalle-tab" data-toggle="tab" href="#detalle" role="tab" aria-controls="detalle"
+               aria-selected="false">Detalle de factura </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="pago-tab" data-toggle="tab" href="#pago" role="tab" aria-controls="pago"
+               aria-selected="false" aria-disabled="true">Pago de factura </a>
         </li>
         <li class="nav-item">
             <a class="nav-link" id="find-tab" data-toggle="tab" href="#find" role="tab" aria-controls="find"
                aria-selected="false">Tabla de Mascotas</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" id="CaseAndVisits-tab" data-toggle="tab" href="#CaseAndVisits" role="tab"
-               aria-controls="CaseAndVisits"
-               aria-selected="false">Tabla de casos y visitas por mascota</a>
         </li>
         <li class="nav-item">
             <a class="nav-link" id="Upuser-tab" data-toggle="tab" href="#Upuser" role="tab" aria-controls="Upuser"
@@ -73,13 +81,9 @@
         <div class="configureStyleMainForms">
 
             <!--Form for creation of owner's pet-->
-            <form action="Createpatsform" autocomplete="off" id="formC" name="formC">
+            <form action="/crearMascota" autocomplete="off" id="formC" name="formC">
                 <fieldset>
                     <legend> Formulario de Registro de mascotas</legend>
-                    <label for="microchip">Ingrese su microchip:</label><br>
-                    <input type="text" name="microchip" size="30" id="microchip" placeholder="Ej: 123456789">
-                    <br>
-                    <br>
                     <label for="name">Ingrese su nombre de la mascota:</label><br>
                     <input type="text" name="name" size="30" id="name" placeholder="Ej: Sammy" required>
                     <br>
@@ -87,42 +91,29 @@
                     <label for="species">Seleccione la especie:</label><br>
                     <select name="species" id="species" required>
                         <option value="" selected="selected">Seleccione</option>
-                        <option value="2">Canino</option>
-                        <option value="3">Felino</option>
+                        <option value="1">Canino</option>
+                        <option value="2">Felino</option>
                     </select>
                     <br>
                     <br>
-
-                    <label for="sex"> Seleccione el sexo:</label><br>
-                    <select name="sex" id="sex" required>
-                        <option value="" selected="selected">Seleccione</option>
-                        <option value="2">Macho</option>
-                        <option value="3">Hembra</option>
-                    </select>
+                    <label for="raza">Ingrese la raza:</label><br>
+                    <input type="text" name="raza" size="30" id="raza" placeholder="Ej: Pastor Aleman" required>
                     <br>
                     <br>
-                    <label for="size">Seleccione el tamaño:</label><br>
-                    <select name="size" id="size" required>
-                        <option value="" selected="selected">Seleccione</option>
-                        <option value="2">Muy Grande</option>
-                        <option value="3">Grande</option>
-                        <option value="4">Mediano</option>
-                        <option value="4">Pequeño</option>
-                        <option value="4">Miniatura</option>
-                    </select>
+                    <label for="peso">Ingrese el peso (Kg):</label><br>
+                    <input type="number" name="peso" maxlength="2" id="peso" placeholder="Ej: 10" required>
                     <br>
                     <br>
-                    <label for="race">Seleccione la raza:</label><br>
-                    <input type="text" name="race" size="30" id="race" placeholder="Ej: Pastor Aleman" required>
+                    <label for="color">Ingrese el color de pelaje de su mascota:</label><br>
+                    <input type="number" name="color" maxlength="2" id="color" placeholder="Ej: Blanco " required>
                     <br>
                     <br>
-                    <label for="imagePet"> Imagen de la mascota
-                    </label><br>
-                    <input type="file" name="imagePet" size="30" id="imagePet" required>
+                    <label for="fecha">Ingrese la fecha de nacimiento:</label><br>
+                    <input type="date" name="fecha" id="fecha" required>
                     <br>
                     <br>
                     <p align="center">
-                        <button type="button" id="Cpets">Crear mascota</button>
+                        <button type="submit" id="Cpets">Crear mascota</button>
                     </p>
                 </fieldset>
             </form>
@@ -132,104 +123,87 @@
     <div class="tab-pane fade" id="update" role="tabpanel" aria-labelledby="update-tab" align="center">
         <div class="configureStyleMainForms">
 
-            <!--Form for the update of owner's pet -->
-            <form action="Uppetsform" autocomplete="off" name="formU" id="formU">
-                <fieldset>
-                    <legend> Formulario de Actualizar de mascotas</legend>
-                    <label for="petid">ID de la mascota:</label><br>
-                    <input id="petid" type="text" name="petid" required disabled>
-                    <br>
-                    <br>
-                    <label for="nameU">Ingrese su nombre de la mascota:</label><br>
-                    <input type="text" name="nameU" size="30" id="nameU" placeholder="Ej: Sammy" required>
-                    <br>
-                    <br>
-                    <label for="microchipU">Ingrese su microchip:</label><br>
-                    <input type="text" name="microchipU" size="30" id="microchipU" placeholder="Ej: 123456789">
-                    <br>
-                    <br>
-
-                    <label for="speciesU">Seleccione la especie:</label><br>
-                    <select name="speciesU" id="speciesU" required>
-                        <option value="" selected="selected">Seleccione</option>
-                        <option value="2">Canino</option>
-                        <option value="3">Felino</option>
-                    </select>
-                    <br>
-                    <br>
-
-                    <label for="sexU"> Seleccione el sexo:</label><br>
-                    <select name="sexU" id="sexU" required>
-                        <option value="" selected="selected">Seleccione</option>
-                        <option value="2">Macho</option>
-                        <option value="3">Hembra</option>
-                    </select>
-                    <br>
-                    <br>
-                    <label for="sizeU">Seleccione el tamaño:</label><br>
-                    <select name="sizeU" id="sizeU" required>
-                        <option value="" selected="selected">Seleccione</option>
-                        <option value="2">Muy Grande</option>
-                        <option value="3">Grande</option>
-                        <option value="4">Mediano</option>
-                        <option value="4">Pequeño</option>
-                        <option value="4">Miniatura</option>
-                    </select>
-                    <br>
-                    <br>
-                    <label for="raceU">Seleccione la raza:</label><br>
-                    <input type="text" name="raceU" size="30" id="raceU" placeholder="Ej: Pastor Aleman" required>
-                    <br>
-                    <br>
-                    <label for="imagePetU"> Imagen de la mascota
-                    </label><br>
-                    <input type="file" name="imagePetU" size="30" id="imagePetU" required>
-                    <br>
-                    <br>
-                    <p align="center">
-                        <button type="button" id="Upets">Actualizar mascota</button>
-                    </p>
-                </fieldset>
-            </form>
+            <h2 class="titles">Facturas del Propietario</h2>
+            <table id="facturas" class="display" style="width:100%">
+                <thead>
+                <tr>
+                    <th scope="col">N# de factura</th>
+                    <th scope="col">ID de mascota</th>
+                    <th scope="col">Fecha</th>
+                    <th scope="col">Total</th>
+                    <th scope="col">Ver detalle</th>
+                    <th scope="col">Pagar</th>
+                </tr>
+                </thead>
+            </table>
 
         </div>
 
     </div>
-    <div class="tab-pane fade" id="petCase" role="tabpanel" aria-labelledby="petCase-tab" align="center">
+    <div class="tab-pane fade" id="detalle" role="tabpanel" aria-labelledby="detalle-tab" align="center">
         <div class="configureStyleMainForms">
-            <!--Form for the creation of a case -->
-            <form name="formCase" autocomplete="off" id="formCase">
+            <form name="detalle1" autocomplete="off" id="detalle1">
                 <fieldset>
-                    <legend> Crear Caso</legend>
-                    <label for="petidC">ID de la mascota:</label><br>
-                    <input id="petidC" type="text" name="petidC" disabled required>
+                    <legend> Detalle de factura</legend>
+                    <br>
+                    <label for="nfactura">N# de factura</label><br>
+                    <input type="text" name="nfactura" id="nfactura" disabled
+                           required>
+                    <br>
+                    <label for="fechaD">Fecha de factura:</label><br>
+                    <input type="date" name="fechaD" id="fechaD" disabled
+                           required>
                     <br>
                     <br>
-                    <label for="caseDate"> Fecha del caso</label><br>
-                    <input type="Date" name="caseDate" size="30" id="caseDate" required>
-                    <br>
-                    <br>
-                    <label for="typeCase">Tipo de caso:</label><br>
-                    <select id="typeCase" name="typeCase" required>
-                        <option value="" selected="selected">Seleccione</option>
-                        <option value="2">Perdida</option>
-                        <option value="3">Robo</option>
-                        <option value="4">Fallecimiento</option>
-                    </select>
-                    <br>
-                    <br>
-                    <label for="description">Descripción:</label><br>
-                    <input type="text" name="description" size="30" id="description" placeholder="Ej: La mascota estaba"
+                    <label for="total">Total:</label><br>
+                    <input type="text" name="total" id="total" disabled
                            required>
                     <br>
                     <br>
 
+                </fieldset>
+            </form>
+            <div id="OwnerTableVisitsCase" align="center">
+                <h2 class="titles">Servicios Facturas del Propietario</h2>
+                <table id="dfacturas" class="display" style="width:100%">
+                    <thead>
+                    <tr>
+                        <th scope="col">Nombre servicio</th>
+                        <th scope="col">Tarifa</th>
+                    </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="tab-pane fade" id="pago" role="tabpanel" aria-labelledby="pago-tab" align="center">
+        <div class="configureStyleMainForms">
+            <h2 class="titles">Pagar facturas del Propietario</h2>
+            <form action="/pagar" name="pfacturas" autocomplete="off" id="pfactura">
+                <fieldset>
+                    <legend> Datos para pagar</legend>
+                    <br>
+                    <label for="forma">Seleccione la forma de pago:</label><br>
+                    <select name="forma" id="forma" required>
+                        <option value="" selected="selected">Seleccione</option>
+                        <option value="1">Efectivo</option>
+                        <option value="2">Tarjetas de crédito</option>
+                        <option value="3">Tarjetas de débito</option>
+                    </select>
+                    <br>
+                    <label for="ptotal">Total a pagar:</label><br>
+                    <input type="text" name="ptotal" size="30" id="ptotal" disabled
+                           required>
+                    <br>
+                    <br>
                     <p align="center">
-                        <button type="button" id="caseB">Crear Caso</button>
+                        <button type="submit" id="pagar">Pagar</button>
                     </p>
                 </fieldset>
             </form>
+
         </div>
+
     </div>
     <div class="tab-pane fade" id="find" role="tabpanel" aria-labelledby="find-tab" align="center">
         <div class="configureStyleMainBox">
@@ -239,106 +213,38 @@
             <table id="myTableOwner" class="display" style="width:100%">
                 <thead>
                 <tr>
-                    <th scope="col">Actualizar</th>
-                    <th scope="col">Crear Caso</th>
-                    <th scope="col">Ver casos y visitas</th>
                     <th scope="col">ID</th>
-                    <th scope="col">microchip</th>
                     <th scope="col">nombre</th>
                     <th scope="col">especie</th>
                     <th scope="col">raza</th>
-                    <th scope="col">tamaño</th>
-                    <th scope="col">sexo</th>
-                    <th scope="col">imagen</th>
+                    <th scope="col">color</th>
+                    <th scope="col">peso</th>
+                    <th scope="col">fecha de nacimiento</th>
                 </tr>
                 </thead>
             </table>
         </div>
     </div>
-    <div class="tab-pane fade" id="CaseAndVisits" role="tabpanel" aria-labelledby="CaseAndVisits-tab" align="center">
-        <div class="configureStyleMainBox">
-            <!-- Table to list all cases and visits of an owner's pets-->
-            <h3 class="titles">Busqueda de casos y visitas por fechas</h3>
-            <h5>Filtrar</h5>
-            <!-- Name and date filters for the cases and visits table-->
-            <form name="formTCV" id="formTCV">
-                <label for="petIdCV">ID de la mascota:</label><br>
-                <input type="text" name="petIdCV" id="petIdCV" size="20" disabled required>
-                <br>
-                <br>
-                <label for="Date1"> Primer rango de fecha</label><br>
-                <input type="Date" name="Date1" size="30" id="Date1" required>
-                <br>
-                <br>
-                <label for="Date2"> Segundo rango de fecha</label><br>
-                <input type="Date" name="Date2" size="30" id="Date2" required>
-                <br>
-                <br>
-                <button class="btn btn-rounded btn-primary" id="filter" type="button">Filtrar</button>
-            </form>
-
-            <br>
-            <div id="OwnerTableVisitsCase" align="center">
-                <table id="myTableCaseVisitOwner" class="display">
-                    <thead>
-                    <tr>
-                        <th scope="col">#</th>
-                        <th scope="col">Fecha</th>
-                        <th scope="col">Caso o Visita</th>
-                        <th scope="col">ID del Caso o Visita</th>
-                        <th scope="col">Nombre de la Mascota</th>
-                        <th scope="col">Tipo</th>
-                        <th scope="col">descripción</th>
-                        <th scope="col">Nombre de la Veterinaria</th>
-                    </tr>
-                    </thead>
-                </table>
-            </div>
-        </div>
-    </div>
-
     <div class="tab-pane fade" id="Upuser" role="tabpanel" aria-labelledby="Upuser-tab" align="center">
         <div class="configureStyleMainForms">
-            <!--Form to update the owner's data-->
-            <form name="formUser" autocomplete="off" id="formUser">
+            <form action="/cambiarDirrecion" name="formUser" autocomplete="off" id="formUser">
                 <fieldset>
                     <legend> Formulario de Actualizar Datos del Propietario</legend>
                     <br>
-                    <label for="neighborhoodUser">Seleccione la localidad:</label><br>
-                    <select id="neighborhoodUser" name="neighborhoodUser" required>
-                        <option value="" selected="selected">Seleccione</option>
-                        <option value="2">Usaquen</option>
-                        <option value="3">Chapinero</option>
-                        <option value="4">Santa Fe</option>
-                        <option value="5">San Cristobal</option>
-                        <option value="6">Usme</option>
-                        <option value="7">Tunjuelito</option>
-                        <option value="8">Bosa</option>
-                        <option value="9">Kennedy</option>
-                        <option value="10">Fontibon</option>
-                        <option value="11">Engativa</option>
-                        <option value="12">Suba</option>
-                        <option value="13">Barrios Unidos</option>
-                        <option value="14">Teusaquillo</option>
-                        <option value="15">Los Martires</option>
-                        <option value="16">Antonio Nariño</option>
-                        <option value="17">Puente Aranda</option>
-                        <option value="18">La Candelaria</option>
-                        <option value="19">Uribe</option>
-                        <option value="20">Ciudad Bolivar</option>
-                        <option value="21">Sumapaz</option>
-                        <option value="22">Municipios aledaños</option>
-                    </select>
+                    <label for="username">Nombre usuario</label><br>
+                    {% if QTc_result %}
+                    <input type="text" name="username" id="username" value="{{QTc_result}}"
+                           disabled required>
+                    {% endif %}
                     <br>
-                    <br>
-                    <label for="addressUser">Digite la dirección:</label><br>
-                    <input type="text" name="addressUser" size="30" id="addressUser" placeholder="Ej: Cr 7 # 100 - 10"
+                    <label for="dirección">Digite la dirección:</label><br>
+                    <input type="text" name="dirección" size="30" id="dirección" placeholder="Ej: Cr 7 # 100 - 10"
                            required>
                     <br>
                     <br>
 
                     <p align="center">
-                        <button type="button" id="Uuser">Actualizar datos</button>
+                        <button type="submit" id="Uuser">Actualizar datos</button>
                     </p>
                 </fieldset>
             </form>
