@@ -153,14 +153,14 @@
                     <td>{{factura[3]}}</td>
                     <td>
 
-                        <button type="button" id="1" value="{{factura[0]}}" name='{{factura[2]}}'
-                                class='{{factura[3]}}' onclick="botonDetalle()">Ver
+                        <button type="button" id="1{{factura[0]}}" value="{{factura[0]}}" name='{{factura[2]}}'
+                                class='{{factura[3]}}' onclick="botonDetalle({{factura[0]}})">Ver
                         </button>
 
                     </td>
                     <td>
-                        <button type="button" id="2" value="{{factura[0]}}" name='{{factura[2]}}' class='{{factura[3]}}'
-                                onclick="botonPago()">Pagar
+                        <button type="button" id="2{{factura[0]}}" value="{{factura[0]}}" name='{{factura[2]}}' class='{{factura[3]}}'
+                                onclick="botonPago({{factura[0]}})">Pagar
                         </button>
 
                     </td>
@@ -319,33 +319,39 @@
     </div>
 </div>
 <script type=text/javascript>
-function botonDetalle(){
-    document.getElementById('nfactura').value =document.getElementById('1').value;
-    document.getElementById('fechaD').value = document.getElementById('1').name;
-    document.getElementById('total').value = document.getElementById('1').className;
-    window.location.href = '/detfactura?username={{QTc_result}}&a='+document.getElementById('1').value+'&b='+document.getElementById('1').name+'&c='+document.getElementById('1').className
-
+function botonDetalle(x){
+    window.location.href = '/detfactura?username={{QTc_result}}&a='+document.getElementById('1'+x).value
+    +'&b='+document.getElementById('1'+x).name+'&c='+document.getElementById('1'+x).className;
 
 }
 {% if detalle %}
 document.getElementById('register-tab').ariaSelected = 'false';
 document.getElementById('detalle-tab').ariaSelected = 'true';
+document.getElementById('register-tab').className = "nav-link";
+document.getElementById('detalle-tab').className = "nav-link active";
 document.getElementById('register').className = "tab-pane fade";
 document.getElementById('detalle').className = "tab-pane fade show active";
-document.getElementById('nfactura').value =document.getElementById('1').value;
-document.getElementById('fechaD').value = document.getElementById('1').name;
-document.getElementById('total').value = document.getElementById('1').className;
+document.getElementById('nfactura').value =getParameterByName('a');
+document.getElementById('fechaD').value = getParameterByName('b');
+document.getElementById('total').value = getParameterByName('c');
 
 {% endif %}
-function botonPago(){
-    document.getElementById('nfactu').value =document.getElementById('2').value;
-    document.getElementById('ptotal').value = document.getElementById('2').className;
+function botonPago(x){
+    document.getElementById('nfactu').value =document.getElementById('2'+x).value;
+    document.getElementById('ptotal').value = document.getElementById('2'+x).className;
     document.getElementById('update-tab').ariaSelected = 'false';
     document.getElementById('pago-tab').ariaSelected = 'true';
+    document.getElementById('update-tab').className = "nav-link";
+    document.getElementById('pago-tab').className = "nav-link active";
     document.getElementById('update').className = "tab-pane fade";
     document.getElementById('pago').className = "tab-pane fade show active";
 }
-
+function getParameterByName(name) {
+    name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+    var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
+    results = regex.exec(location.search);
+    return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+}
 </script>
 </body>
 

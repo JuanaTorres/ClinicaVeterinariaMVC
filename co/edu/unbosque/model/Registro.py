@@ -31,8 +31,8 @@ class Registro:
             return "No existe datos"
         else:
             return resultado
-    def obtenerIDRegistro(self):
-        consulta =f"select r.id_registro from registrohistorico r where r.estado='A'"
+    def obtenerIDRegistro(self,usuarioV):
+        consulta =f"select r.id_registro from registrohistorico r where r.estado='A' and  r.usuario_veterinario='{usuarioV}'"
         resultado = self.archivo.realizarSQL(consulta)
         if (resultado == []):
             return "No existe datos"
