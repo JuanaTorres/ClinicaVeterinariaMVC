@@ -81,7 +81,7 @@ class Mascota:
             return resultado
 
     def obtenerMascotasporUsuario(self, username):
-        consulta = f"select m.id_mascota as id, m.nombre as nombre , e.descripcion as especie , r.descripcion as raza, c.descripcion as color, m.peso as peso, m.fecha_nacimiento as fecha_nacimiento , m.usuario_propietario as propietario from mascota m, especie e, raza r, color c where m.especie=e.id_especie AND m.raza=r.id_raza AND m.color=c.id_color AND m.estado='A' AND m.usuario_propietario='{username}'group by m.id_mascota, m.nombre, e.descripcion, r.descripcion, c.descripcion, m.peso, m.fecha_nacimiento, m.usuario_propietario"
+        consulta = f"select m.id_mascota as id, m.nombre as nombre , e.descripcion as especie , r.descripcion as raza, c.descripcion as color, m.peso as peso, m.fecha_nacimiento as fecha_nacimiento from mascota m, especie e, raza r, color c where m.especie=e.id_especie AND m.raza=r.id_raza AND m.color=c.id_color AND m.estado='A' AND m.usuario_propietario='{username}'group by m.id_mascota, m.nombre, e.descripcion, r.descripcion, c.descripcion, m.peso, m.fecha_nacimiento, m.usuario_propietario"
         resultado = self.archivo.realizarSQL(consulta)
         if (resultado == []):
             return "No existe esa mascota"

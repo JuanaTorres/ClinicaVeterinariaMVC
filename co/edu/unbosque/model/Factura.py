@@ -26,15 +26,21 @@ class Factura:
                             return a
 
     def obtenerFacturaMascota(self, id_mascota):
-        r = self.archivo.realizarInsertSQL(f"select f.nfactura,f.tarifa from factura f, registrohistorico r, mascota ma  where f.id_registro=r.id_registro and r.id_mascota=ma.id_mascota and r.id_mascota='{id_mascota}')")
+        r = self.archivo.realizarSQL(f"select f.nfactura,ma.id_mascota, f.fecha, f.tarifa from factura f, registrohistorico r, mascota ma  where f.id_registro=r.id_registro and r.id_mascota=ma.id_mascota and r.id_mascota='{id_mascota}'")
         return r
     def generarDetalleFactura(self, nfactura, id_servicio):
         r = self.archivo.realizarInsertSQL(f"insert into facturadetalle values('{id_servicio}', '{nfactura}')")
         return r
 
     def obtenerTotalFacturas(self):
-        consulta = "select  count (*) as cantidad ,sum(f.tarifa) as Total from facturas f"
+        consulta = "select  count (*) as cantidad ,sum(f.tarifa) as Total from factura f"
         resultado = self.archivo.realizarSQL(consulta)
+        if resultado == []:
+            return "No existen datos"
+        else:
+            return resultado
+    def obtenerdetServico(self,id):
+        resultado = self.archivo.realizarSQL(f"select s.id_servicio from factura f, servicio s, facturadetalle d where f.nfactura=d.nfactura and f.nfactura='{id}' and d.id_servicio=s.id_servicio")
         if resultado == []:
             return "No existen datos"
         else:

@@ -63,10 +63,19 @@
             <table id="myTableOfficialOwners" class="table table-fluid">
                 <thead>
                 <tr>
-                    <th scope="col">Rol</th>
-                    <th scope="col">Cantidad de usuarios</th>
+                    <th >Rol</th>
+                    <th >Cantidad de usuarios</th>
                 </tr>
                 </thead>
+                <tbody>
+
+                {% for user in user %}
+                <tr>
+                    <td>{{user[0]}}</td>
+                    <td>{{user[1]}}</td>
+                </tr>
+                {% endfor %}
+                </tbody>
             </table>
 
         </div>
@@ -78,11 +87,19 @@
             <table id="myTableOfficialPets" class="table table-fluid">
                 <thead>
                 <tr>
-                    <th scope="col">Usuario de Propietario</th>
-                    <th scope="col">Cantidad de Mascotas</th>
+                    <th >Usuario de Propietario</th>
+                    <th>Cantidad de Mascotas</th>
 
                 </tr>
                 </thead>
+                <tbody>
+                {% for masc in masc %}
+                <tr>
+                    <td>{{masc[0]}}</td>
+                    <td>{{masc[1]}}</td>
+                </tr>
+                {% endfor %}
+                </tbody>
             </table>
         </div>
 
@@ -95,10 +112,18 @@
             <table id="myTableOfficialCases" class="table table-fluid">
                 <thead>
                 <tr>
-                    <th scope="col">Usuario Veterinario</th>
-                    <th scope="col">Cantidad Registros</th>
+                    <th >Usuario Veterinario</th>
+                    <th >Cantidad Registros</th>
                 </tr>
                 </thead>
+                <tbody>
+                {% for vres in vres %}
+                <tr>
+                    <td>{{vres[0]}}</td>
+                    <td>{{vres[1]}}</td>
+                </tr>
+                {% endfor %}
+                </tbody>
             </table>
         </div>
     </div>
@@ -110,10 +135,18 @@
             <table id="myTableOfficialVisits" class="table table-fluid">
                 <thead>
                 <tr>
-                    <th scope="col">Cantidad de Facturas</th>
-                    <th scope="col"> Valor Total</th>
+                    <th >Cantidad de Facturas</th>
+                    <th > Valor Total</th>
                 </tr>
                 </thead>
+                <tbody>
+                {% for fact in fact %}
+                <tr>
+                    <td>{{fact[0]}}</td>
+                    <td>{{fact[1]}}</td>
+                </tr>
+                {% endfor %}
+                </tbody>
             </table>
         </div>
 

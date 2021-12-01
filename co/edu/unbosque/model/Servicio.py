@@ -32,3 +32,10 @@ class Servicio:
             return "Ocurrio un error"
         else:
             return "OK"
+
+    def obtenerServicios(self, id):
+        r = self.archivo.realizarSQL(f"select s.nombre, s.tarifa from servicio s where s.id_servicio='{id}'and s.estado='A'")
+        if r == [] or r == "Ocurrio un error":
+            return "Ocurrio un error"
+        else:
+            return r

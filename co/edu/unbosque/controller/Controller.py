@@ -1,6 +1,5 @@
 import os
 
-import resp as resp
 
 from co.edu.unbosque.model import Usuario
 from co.edu.unbosque.model import Mascota
@@ -8,7 +7,7 @@ from co.edu.unbosque.model import Factura
 from co.edu.unbosque.model import Formapago
 from co.edu.unbosque.model import Registro
 from co.edu.unbosque.model import Servicio
-from flask import Flask, render_template, request, flash, redirect, url_for, make_response
+from flask import Flask, render_template, request, flash, redirect, url_for
 import secrets
 
 
@@ -23,6 +22,29 @@ class Controller:
         self.app.run()
 
     @staticmethod
+    @app.route('/detfactura', methods=['GET', 'POST'])
+    def detfactura():
+        username = request.args.get('username')
+        a = request.args.get('a', 0, type=int)
+        b = request.args.get('b')
+        c = request.args.get('c', 0, type=int)
+        usuario = Usuario.Usuario()
+        servicio = Servicio.Servicio()
+        factura1 = (Factura.Factura().obtenerdetServico(a))
+        rol = usuario.obtenerRol(username)
+        mascota = Controller.listaMascotas(username)
+        factura = Controller.listaFactura(username)
+        data = Controller.listaMascotasID()
+        regis = Controller.listaRegistroID()
+        detalle = []
+        for i in range(0, len(factura1)):
+            s = servicio.obtenerServicios(factura1[i][0])
+            for j in range(0, len(s)):
+                detalle.append(s[j])
+        return render_template(f'{rol}.html', QTc_result=username, colour=data, regis=regis, mascota=mascota,
+                               factura=factura, detalle=detalle)
+
+    @staticmethod
     @app.route('/')
     def principal():
         return render_template('index.html')
@@ -33,9 +55,87 @@ class Controller:
         idmascota = mascota.obtenerMascotasID()
         data = []
         if (idmascota == "No existe datos"):
-            return ["No existe datos", ""]
+            return "No existe datos"
         for i in range(0, len(idmascota)):
             data.append(idmascota[i][0])
+        return data
+
+    @staticmethod
+    def listaRegistro(username):
+        registro = Registro.Registro()
+        historico = registro.obtenerRegistro(username)
+        data = []
+        if (historico == "No existe datos"):
+            return "No existe datos"
+        for i in range(0, len(historico)):
+            data.append(historico[i])
+        return data
+
+    @staticmethod
+    def listaUsuariosRol():
+        usuario = Usuario.Usuario()
+        list = usuario.obtenerUsuarioporTipo()
+        data = []
+        if (list == "No existe datos"):
+            return "No existe datos"
+        for i in range(0, len(list)):
+            data.append(list[i])
+        return data
+
+    @staticmethod
+    def listaMascotaPropietario():
+        mascota = Mascota.Mascota()
+        list = mascota.obtenerMascotasporPropietario()
+        data = []
+        if (list == "No existe datos"):
+            return "No existe datos"
+        for i in range(0, len(list)):
+            data.append(list[i])
+        return data
+
+    @staticmethod
+    def listaRegistroVet():
+        registro = Registro.Registro()
+        list = registro.obtenerRegistrosPorVeterinario()
+        data = []
+        if (list == "No existe datos"):
+            return "No existe datos"
+        for i in range(0, len(list)):
+            data.append(list[i])
+        return data
+
+    @staticmethod
+    def listafacturasT():
+        facturas = Factura.Factura()
+        list = facturas.obtenerTotalFacturas()
+        data = []
+        if (list == "No existe datos"):
+            return "No existe datos"
+        for i in range(0, len(list)):
+            data.append(list[i])
+        return data
+    @staticmethod
+    def listaFactura(username):
+        mascota = Mascota.Mascota()
+        idmascota = mascota.obtenerMascotasporUsuario(username)
+        data = []
+        if (idmascota == "No existe esa mascota"):
+            return "No existe datos"
+        for i in range(0, len(idmascota)):
+            factura = (Factura.Factura().obtenerFacturaMascota(idmascota[i][0]))
+            for j in range(0, len(factura)):
+                data.append(factura[j])
+        return data
+
+    @staticmethod
+    def listaMascotas(username):
+        mascota = Mascota.Mascota()
+        idmascota = mascota.obtenerMascotasporUsuario(username)
+        data = []
+        if (idmascota == "No existe datos"):
+            return "No existe datos"
+        for i in range(0, len(idmascota)):
+            data.append(idmascota[i])
         return data
 
     @staticmethod
@@ -44,7 +144,7 @@ class Controller:
         idregistro = registro.obtenerIDRegistro()
         data = []
         if (idregistro == "No existe datos"):
-            return ["No existe datos", ""]
+            return "No existe datos"
         for i in range(0, len(idregistro)):
             data.append(idregistro[i][0])
         return data
@@ -68,9 +168,17 @@ class Controller:
                 return redirect(url_for("validarUsuario"))
             else:
                 rol = rol[0][0].lower()
+                mascota = Controller.listaMascotas(username)
+                factura = Controller.listaFactura(username)
+                registros=Controller.listaRegistro(username)
+                vres=Controller.listaRegistroVet()
+                fact=Controller.listafacturasT()
+                masc=Controller.listaMascotaPropietario()
+                user=Controller.listaUsuariosRol()
                 data = Controller.listaMascotasID()
                 regis = Controller.listaRegistroID()
-                return render_template(f'{rol}.html', QTc_result=username, colour=data, regis=regis)
+                return render_template(f'{rol}.html', QTc_result=username, colour=data, regis=regis, mascota=mascota,
+                                       factura=factura, registros=registros,user=user, masc=masc, fact=fact, vres=vres )
         return render_template('index.html')
 
     @staticmethod
@@ -112,7 +220,13 @@ class Controller:
             r = mascota.crearMascota(nombre, especie, raza, color, peso, fecha, username)
             if r != "OK" or r == "Ocurrio un error":
                 flash(r)
-                return render_template(f'propietario.html', QTc_result=username)
+                mascota = Controller.listaMascotas(username)
+                factura = Controller.listaFactura(username)
+                data = Controller.listaMascotasID()
+                regis = Controller.listaRegistroID()
+                return render_template(f'propietario.html', QTc_result=username, colour=data, regis=regis,
+                                       mascota=mascota,
+                                       factura=factura)
             else:
                 return render_template(f'propietario.html', QTc_result=username)
         return render_template('propietario.html')
@@ -129,14 +243,23 @@ class Controller:
             if r != "OK" or r == "Ocurrio un error":
                 flash(r)
                 rol = usuario.obtenerRol(username)
+                mascota = Controller.listaMascotas(username)
+                factura = Controller.listaFactura(username)
                 data = Controller.listaMascotasID()
                 regis = Controller.listaRegistroID()
-                return render_template(f'{rol}.html', QTc_result=username, colour=data, regis=regis)
+                return render_template(f'{rol}.html', QTc_result=username, colour=data, regis=regis,
+                                       mascota=mascota,
+                                       factura=factura)
             else:
                 rol = usuario.obtenerRol(username)
+                mascota = Controller.listaMascotas(username)
+                factura = Controller.listaFactura(username)
                 data = Controller.listaMascotasID()
                 regis = Controller.listaRegistroID()
-                return render_template(f'{rol}.html', QTc_result=username, colour=data, regis=regis)
+                registros = Controller.listaRegistro(username)
+                return render_template(f'{rol}.html', QTc_result=username, colour=data, regis=regis,
+                                       mascota=mascota, registros=registros,
+                                       factura=factura)
         return render_template('index.html')
 
     @staticmethod
@@ -154,12 +277,14 @@ class Controller:
             if r == "No existe este usuario" or r == "Ocurrio un error":
                 flash(r)
                 data = Controller.listaMascotasID()
+                registros = Controller.listaRegistro(username)
                 regis = Controller.listaRegistroID()
-                return render_template(f'veterinario.html', QTc_result=username, colour=data, regis=regis)
+                return render_template(f'veterinario.html', QTc_result=username, colour=data, regis=regis, registros=registros)
             else:
+                registros = Controller.listaRegistro(username)
                 data = Controller.listaMascotasID()
                 regis = Controller.listaRegistroID()
-                return render_template(f'veterinario.html', QTc_result=username, colour=data, regis=regis)
+                return render_template(f'veterinario.html', QTc_result=username, colour=data, regis=regis,registros=registros)
         return render_template('veterinario.html')
 
     @staticmethod
@@ -171,27 +296,32 @@ class Controller:
             registro = request.form.get("registroID")
             total = request.form.get("TotalF")
             factura = Factura.Factura()
-            lista=[]
-            if total=="Seleccione los servicios":
+            lista = []
+            if total == "Seleccione los servicios":
                 flash("Debe elegir los serivios prestados")
                 data = Controller.listaMascotasID()
                 regis = Controller.listaRegistroID()
-                return render_template(f'veterinario.html', QTc_result=username, colour=data, regis=regis)
+                registros = Controller.listaRegistro(username)
+                return render_template(f'veterinario.html', QTc_result=username, colour=data, regis=regis,registros=registros)
             else:
-                for i in range(1,9):
-                    if  request.form.get(f"n{i}")!=None:
+                for i in range(1, 9):
+                    if request.form.get(f"n{i}") != None:
                         lista.append(request.form.get(f"n{i}"))
-                r =factura.generarFactura(fecha,total,registro,lista)
-                if r != "OK" or r == "Ocurrio un error" or r=="Ya existe una factura con ese id de registro":
+                r = factura.generarFactura(fecha, total, registro, lista)
+                if r != "OK" or r == "Ocurrio un error" or r == "Ya existe una factura con ese id de registro":
                     flash(r)
                     data = Controller.listaMascotasID()
                     regis = Controller.listaRegistroID()
-                    return render_template(f'veterinario.html', QTc_result=username, colour=data, regis=regis)
+                    registros = Controller.listaRegistro(username)
+                    return render_template(f'veterinario.html', QTc_result=username, colour=data, regis=regis,
+                                           registros=registros)
+
                 else:
                     data = Controller.listaMascotasID()
                     regis = Controller.listaRegistroID()
-                    return render_template(f'veterinario.html', QTc_result=username, colour=data, regis=regis)
-
+                    registros = Controller.listaRegistro(username)
+                    return render_template(f'veterinario.html', QTc_result=username, colour=data, regis=regis,
+                                           registros=registros)
         return render_template('veterinario.html')
 
     @staticmethod
@@ -204,10 +334,22 @@ class Controller:
             total = request.form.get("ptotal")
             formapago = Formapago.Formapago()
 
-            r = formapago.realizarPago(factura,total,forma)
+            r = formapago.realizarPago(factura, total, forma)
             if r != "OK" or r == "Ocurrio un error":
                 flash(r)
-                return render_template(f'propietario.html', QTc_result=username)
+                mascota = Controller.listaMascotas(username)
+                factura = Controller.listaFactura(username)
+                data = Controller.listaMascotasID()
+                regis = Controller.listaRegistroID()
+                return render_template(f'propietario.html', QTc_result=username, colour=data, regis=regis,
+                                       mascota=mascota,
+                                       factura=factura)
             else:
-                return render_template(f'propietario.html', QTc_result=username)
+                mascota = Controller.listaMascotas(username)
+                factura = Controller.listaFactura(username)
+                data = Controller.listaMascotasID()
+                regis = Controller.listaRegistroID()
+                return render_template(f'propietario.html', QTc_result=username, colour=data, regis=regis,
+                                       mascota=mascota,
+                                       factura=factura)
         return render_template('veterinario.html')

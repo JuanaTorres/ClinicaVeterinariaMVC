@@ -122,6 +122,17 @@
                         <th scope="col">Id Mascota</th>
                     </tr>
                     </thead>
+                    <tbody>
+
+                {% for registros in registros %}
+                <tr>
+                    <td>{{registros[0]}}</td>
+                    <td>{{registros[1]}}</td>
+                    <td>{{registros[2]}}</td>
+                    <td>{{registros[3]}}</td>
+                </tr>
+                {% endfor %}
+                </tbody>
                 </table>
             </div>
 
